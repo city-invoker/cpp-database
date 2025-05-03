@@ -61,3 +61,8 @@ install(
     FILES_MATCHING PATTERN "*.h"
 )
 
+install(
+    DIRECTORY third_party/mysqlclient/include/
+    DESTINATION ${TRPC_INCLUDE_PATHS}/mysqlclient
+    FILES_MATCHING PATTERN "*.h"
+)
