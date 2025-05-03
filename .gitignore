@@ -9,6 +9,7 @@ bazel-*
 *.a
 *.dylib
 
+tags
 CMakeCache.txt
 CMakeFiles
 CMakeScripts

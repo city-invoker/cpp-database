@@ -15,33 +15,49 @@ cmake_minimum_required(VERSION 3.14)
 
 project(trpc-cpp-database)
 
+set(CMAKE_VERBOSE_MAKEFILE ON)
 set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
+set(CMAKE_CXX_EXTENSIONS OFF)
+set(CMAKE_BUILD_TYPE DEBUG)
 
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wno-sign-compare -Wno-error=maybe-uninitialized")
 set(CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake")
 
-message("Cloning trpc-cpp, please waiting...")
-include(com_github_trpc_cpp)
+set(TRPC_INSTALL_PATH "/usr/local/trpc-cpp/trpc")
+set(TRPC_INCLUDE_PATHS "${TRPC_INSTALL_PATH}/include/")
+
+include(${TRPC_INSTALL_PATH}/cmake/config/trpc_config.cmake)
+include(${TRPC_INSTALL_PATH}/cmake/tools/trpc_utils.cmake)
 
 message("Fetching mysql libs, please waiting...")
 include(mysqlclient)
 
 file(GLOB_RECURSE SRC_FILES ./trpc/client/*.cc)
-
 file(GLOB_RECURSE TEST_FILES ./trpc/client/*test.cc)
-
 list(REMOVE_ITEM SRC_FILES ${TEST_FILES})
 
-add_library(trpc_cpp_database_mysql
-    ${SRC_FILES}
-)
+set(TARGET "trpc_cpp_database_mysql")
+add_library(${TARGET} STATIC ${SRC_FILES})
 
-target_link_libraries(
-    trpc_cpp_database_mysql PRIVATE
-    ${TARGET_LINK_LIBS}
-)
-
+target_link_directories(${TARGET} PUBLIC "${TRPC_INSTALL_PATH}/lib/")
+target_link_libraries(${TARGET} PRIVATE trpc)
 target_include_directories(
-    trpc_cpp_database_mysql PUBLIC
+    ${TARGET} PUBLIC
     ${CMAKE_CURRENT_SOURCE_DIR}
-    ${TARGET_INCLUDE_PATHS}
+    ${TRPC_INCLUDE_PATHS}
+    ${MYSQLCLIENT_INCLUDE_DIR}
 )
+
+#install
+install(
+    TARGETS ${TARGET}
+    ARCHIVE DESTINATION ${TRPC_INSTALL_PATH}/lib
+)
+
+install(
+    DIRECTORY trpc/client/mysql/
+    DESTINATION ${TRPC_INCLUDE_PATHS}/${TARGET}
+    FILES_MATCHING PATTERN "*.h"
+)
+

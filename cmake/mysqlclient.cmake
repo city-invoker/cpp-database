@@ -20,11 +20,10 @@ endif()
 string(REGEX REPLACE "^([0-9]+\\.[0-9]+)\\..*" "\\1" MYSQLCLIENT_MAJOR_VER "${MYSQLCLIENT_VERSION_TAG}")
 set(MYSQLCLIENT_URL "https://dev.mysql.com/get/Downloads/MySQL-${MYSQLCLIENT_MAJOR_VER}/mysql-${MYSQLCLIENT_VERSION_TAG}-linux-glibc2.17-x86_64-minimal.tar.xz")
 
-
 FetchContent_Declare(
         mysqlclient
         URL         ${MYSQLCLIENT_URL}
-        SOURCE_DIR  ${TRPC_ROOT_PATH}/cmake_third_party/mysqlclient
+        SOURCE_DIR  ../third_party/mysqlclient
 )
 
 FetchContent_GetProperties(mysqlclient)
