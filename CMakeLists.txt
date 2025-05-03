@@ -57,7 +57,7 @@ install(
 
 install(
     DIRECTORY trpc/client/mysql/
-    DESTINATION ${TRPC_INCLUDE_PATHS}/${TARGET}
+    DESTINATION ${TRPC_INCLUDE_PATHS}/trpc/client/mysql
     FILES_MATCHING PATTERN "*.h"
 )
 
