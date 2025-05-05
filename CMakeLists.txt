@@ -41,7 +41,7 @@ set(TARGET "trpc_cpp_database_mysql")
 add_library(${TARGET} STATIC ${SRC_FILES})
 
 target_link_directories(${TARGET} PUBLIC "${TRPC_INSTALL_PATH}/lib/")
-target_link_libraries(${TARGET} PRIVATE trpc)
+target_link_libraries(${TARGET} PUBLIC trpc ${TARGET_LINK_LIBS})
 target_include_directories(
     ${TARGET} PUBLIC
     ${CMAKE_CURRENT_SOURCE_DIR}
@@ -53,6 +53,11 @@ target_include_directories(
 install(
     TARGETS ${TARGET}
     ARCHIVE DESTINATION ${TRPC_INSTALL_PATH}/lib
+)
+
+install(
+    FILES ${CMAKE_CURRENT_SOURCE_DIR}/third_party/mysqlclient/lib/libmysqlclient.a
+    DESTINATION ${TRPC_INSTALL_PATH}/lib
 )
 
 install(
